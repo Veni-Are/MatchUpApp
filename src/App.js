@@ -12,123 +12,79 @@ import {
   View,
   withAuthenticator,
 } from '@aws-amplify/ui-react';
+import logo from './MatchUp.png';
 import { listNotes } from "./graphql/queries";
 import {
   createNote as createNoteMutation,
   deleteNote as deleteNoteMutation,
 } from "./graphql/mutations";
+import { Dropdown } from "rsuite";
+import "rsuite/dist/rsuite.min.css";
+import Link from "next/link";
 
 const App = ({ signOut }) => {
-  const [notes, setNotes] = useState([]);
-
   useEffect(() => {
-    fetchNotes();
   }, []);
 
-  async function fetchNotes() {
-  const apiData = await API.graphql({ query: listNotes });
-  const notesFromAPI = apiData.data.listNotes.items;
-  await Promise.all(
-    notesFromAPI.map(async (note) => {
-      if (note.image) {
-        const url = await Storage.get(note.name);
-        note.image = url;
-      }
-      return note;
-    })
-  );
-  setNotes(notesFromAPI);
-  }
-
-  async function createNote(event) {
-  event.preventDefault();
-  const form = new FormData(event.target);
-  const image = form.get("image");
-  const data = {
-    name: form.get("name"),
-    description: form.get("description"),
-    image: image.name,
-  };
-  if (!!data.image) await Storage.put(data.name, image);
-  await API.graphql({
-    query: createNoteMutation,
-    variables: { input: data },
-  });
-  fetchNotes();
-  event.target.reset();
-  }
-
-  async function deleteNote({ id, name }) {
-  const newNotes = notes.filter((note) => note.id !== id);
-  setNotes(newNotes);
-  await Storage.remove(name);
-  await API.graphql({
-    query: deleteNoteMutation,
-    variables: { input: { id } },
-  });
-  }
+const newLink = (props) => {
+    const {
+        href, children, ...rest
+    } = props;
+    return (
+        <Link href={href} {...rest}>
+            <a href={href} style={
+                {
+                    width: 500,
+                    color: "green"
+                }}>
+                {" "}
+                {children}
+            </a>
+        </Link>
+    );
+};
 
   return (
     <View className="App">
-      <Heading level={1}>My Notes App</Heading>
-      <View as="form" margin="3rem 0" onSubmit={createNote}>
-        <Flex direction="row" justifyContent="center">
-          <TextField
-            name="name"
-            placeholder="Note Name"
-            label="Note Name"
-            labelHidden
-            variation="quiet"
-            required
-          />
-          <TextField
-            name="description"
-            placeholder="Note Description"
-            label="Note Description"
-            labelHidden
-            variation="quiet"
-            required
-          />
-          <Button type="submit" variation="primary">
-            Create Note
-          </Button>
-        </Flex>
-	  <View
-  	    name="image"
-  	    as="input"
-  	    type="file"
-  	    style={{ alignSelf: "end" }}
-      	  />
-      </View>
-      <Heading level={2}>Current Notes</Heading>
-      <View margin="3rem 0">
-        {notes.map((note) => (
-  	<Flex
-    	key={note.id || note.name}
-    	direction="row"
-    	justifyContent="center"
-    	alignItems="center"
-  	>
-    	<Text as="strong" fontWeight={700}>
-     	 {note.name}
-    	</Text>
-    	<Text as="span">{note.description}</Text>
-    	{note.image && (
-     	 <Image
-       	 src={note.image}
-       	 alt={`visual aid for ${notes.name}`}
-       	 style={{ width: 400 }}
-      	/>
-    	)}
-   	 <Button variation="link" onClick={() => deleteNote(note)}>
-      	Delete note
-   	 </Button>
-  	</Flex>
-      ))}
-      </View>
+        <div>
+            <nav class="navbar background">
+                <ul class="nav-list">
+                    <div class="logo">
+                        <img src= {logo}/>
+                    </div>
+                    <Dropdown title="Sports"  style={{ marginLeft: 80 }}>
+                                    <Dropdown.Item as={newLink} href="https://www.geeksforgeeks.org/">
+                                        Soccer
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                        as={newLink} href="https://www.geeksforgeeks.org/">
+                                        Tennis
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                        as={newLink} href="https://www.geeksforgeeks.org/">
+                                        Badminton
+                                    </Dropdown.Item>
+                    </Dropdown>
+                    <li><a href="#aboutus">About US</a></li>
+                    <li><a href="#FAQ">FAQ</a></li>
+                    <li><a href="#ContactUS">Contact us</a></li>
+                </ul>
+
+                <div class="rightNav">
+                    <input type="text" name="search" id="search" />
+                    <button class="btn btn-sm">Search</button>
+                </div>
+            </nav>
+            <footer className="footer">
+                <p className="text-footer">
+                    Copyright ©-All rights are reserved
+                </p>
+            </footer>
+        </div>
       <Button onClick={signOut}>Sign Out</Button>
     </View>
   );
 };
+
 
 export default withAuthenticator(App);
