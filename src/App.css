@@ -35,6 +35,11 @@ background-color: #000;
     border-radius: 50px;
 }
 
+.logout {
+    display: flex;
+    justify-content: right;
+}
+
 .nav-list li {
     list-style: none;
     padding: 26px 30px;
@@ -49,8 +54,8 @@ background-color: #000;
     color: grey;
 }
 
-.rightnav {
-    width: 30%;
+.rightNav {
+    width: 90%;
     text-align: right;
 }
 
