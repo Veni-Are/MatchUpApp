@@ -16,10 +16,18 @@ import {
 } from '@aws-amplify/ui-react';
 import type { LinkProps } from "react-router-dom";
 import logo from './MatchUp.png';
-import Component3 from './ui-components/Component3.jsx';
+import sportpage from './SportsImage.png';
+import eventspage from './EventsPage.png';
+import ComponentD from './ui-components/ComponentD.jsx';
+import ComponentFAQ from './ui-components/ComponentFAQ.jsx';
+import ComponentST from './ui-components/ComponentST.jsx';
+import ComponentHome from './ui-components/ComponentHome.jsx';
+import { Header } from "./Header";
+import { Footer } from "./Footer";
+import { SignInHeader } from "./SignInHeader";
+import { SignInFooter } from "./SignInFooter";
 
-
-const App = ({ signOut }) => {
+const App = ({ signOut, user }) => {
   useEffect(() => {
   }, []);
 
@@ -29,15 +37,13 @@ const App = ({ signOut }) => {
         <div class="logo">
             <img src= {logo} alt="application logo"/>
         </div>
-        <div class="logout">
-            <Button onClick={signOut}>Sign Out</Button>
-        </div>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
           <Route path="sports" element={<Sports />} />
+          <Route path="events" element={<Events />} />
           <Route path="faq" element={<FAQ />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
@@ -45,8 +51,6 @@ const App = ({ signOut }) => {
     </div>
   </View>
   );
-}
-
 
 function CustomLink({ children, to, ...props }: LinkProps) {
   let resolved = useResolvedPath(to);
@@ -65,10 +69,14 @@ function CustomLink({ children, to, ...props }: LinkProps) {
   );
 }
 
+
 function Layout() {
   return (
     <div>
       <nav>
+        <div class="logout">
+            <Button onClick={signOut}>Sign Out</Button>
+        </div>
         <ul class="nav-list">
           <li>
             <CustomLink to="/">Home</CustomLink>
@@ -77,7 +85,10 @@ function Layout() {
             <CustomLink to="/about">About</CustomLink>
           </li>
           <li>
-            <CustomLink to="/sports">Sports</CustomLink>
+            <CustomLink to="/sports">Find a Player</CustomLink>
+          </li>
+          <li>
+            <CustomLink to="/events">Events</CustomLink>
           </li>
           <li>
             <CustomLink to="/contact">Contact</CustomLink>
@@ -85,49 +96,58 @@ function Layout() {
           <li>
             <CustomLink to="/faq">FAQ</CustomLink>
           </li>
-        </ul>
+          </ul>
       </nav>
       <Outlet />
     </div>
   );
 }
+}
 
 function Home() {
   return (
-    <div>
-      <h1>Home</h1>
+    <div class="component">
+        <ComponentHome />
     </div>
   );
 }
 
 function About() {
   return (
-    <div>
-      <h1>About</h1>
+    <div class="component">
+      <ComponentD />
     </div>
   );
 }
 
 function Sports() {
   return (
-    <div>
-    <Component3 />
+    <div class="component">
+        <img src= {sportpage} alt="sportpage logo"/>
+    </div>
+  );
+}
+
+function Events() {
+  return (
+    <div class="component">
+        <img src= {eventspage} alt="eventspage logo"/>
     </div>
   );
 }
 
 function Contact() {
   return (
-    <div>
-    <h1>Mail us on support@matchup.com</h1>
+    <div class="component">
+            <ComponentST />
     </div>
   );
 }
 
 function FAQ() {
   return (
-    <div>
-    <h1>Frequenty asked questions</h1>
+    <div class="component">
+        <ComponentFAQ />
     </div>
   );
 }
@@ -143,4 +163,13 @@ function NoMatch() {
   );
 }
 
-export default withAuthenticator(App);
+export default withAuthenticator(App, {
+  components: {
+    Header,
+    SignIn: {
+      Header: SignInHeader,
+      Footer: SignInFooter
+    },
+    Footer
+  }
+});

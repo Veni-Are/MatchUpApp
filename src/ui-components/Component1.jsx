@@ -19,6 +19,7 @@ export default function Component1(props) {
       alignItems="unset"
       justifyContent="unset"
       position="relative"
+      border="1px SOLID rgba(0,0,0,1)"
       padding="0px 0px 0px 0px"
       {...rest}
       {...getOverrideProps(overrides, "Component1")}

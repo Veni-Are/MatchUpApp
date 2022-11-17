@@ -1,3 +1,4 @@
+
 * {
     /* background-image: url("./wallpaper.jpeg"); */
     background-color: white;
@@ -9,7 +10,6 @@
   text-align: center;
 }
 
-
 .App-link {
   color: #61dafb;
 }
@@ -19,15 +19,15 @@ background-color: #000;
 }
 
 .nav-list {
-    width: 70%;
+    width: 100%;
     display: flex;
     align-items: center;
+    justify-content: left;
 }
 
 .logo {
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 
 .logo img {
@@ -36,9 +36,17 @@ background-color: #000;
 }
 
 .logout {
+    width: 98%;
     display: flex;
     justify-content: right;
 }
+
+.component {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 .nav-list li {
     list-style: none;
